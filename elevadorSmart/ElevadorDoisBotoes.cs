@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace elevadorSmart
+namespace ElevadorSmartDotNetFramework
 {
     public static class ElevadorDoisBotoes
     {
@@ -15,8 +15,7 @@ namespace elevadorSmart
         public enum EDirecaoDestino: int
         {
             subir = 0,
-            descer = 1,
-            neutro = 2
+            descer = 1
         }
 
         public static void Run(List<Passageiro> lstPassageiro, int posAtualElevador)
@@ -45,15 +44,15 @@ namespace elevadorSmart
                         pass.Wait = false;
                     }
 
-                    if ((pass.Wait == true) && (Math.Abs(pass.PosIncial - posAtual) < menorValor) && ((direcaoDestino == pass.DirecaoDestino) || (direcaoDestino == -1)))
-                    {
-                        menorValor = Math.Abs(pass.PosIncial - posAtual);
-                        iProximaParada = pass.PosIncial;
-                    }
-                    else if ((pass.Wait == false) && (Math.Abs(pass.PosDestino - posAtual) < menorValor) && ((direcaoDestino == pass.DirecaoDestino) || (direcaoDestino == -1)))
+                    if ((pass.Wait == false) && (Math.Abs(pass.PosDestino - posAtual) < menorValor) && ((direcaoDestino == pass.DirecaoDestino) || (direcaoDestino == -1)))
                     {
                         menorValor = Math.Abs(pass.PosDestino - posAtual);
                         iProximaParada = pass.PosDestino;
+                    }
+                    else if ((pass.Wait == true) && (Math.Abs(pass.PosIncial - posAtual) < menorValor) && ((direcaoDestino == pass.DirecaoDestino) || (direcaoDestino == -1)))
+                    {
+                        menorValor = Math.Abs(pass.PosIncial - posAtual);
+                        iProximaParada = pass.PosIncial;
                     }
 
                     if (iProximaParada > posAtual)
@@ -99,8 +98,24 @@ namespace elevadorSmart
 
                 if (lstPassageiroNew.Count > 0)
                 {
-                    if (!(lstPassageiroNew.Exists(x => x.Wait == false)))
-                        direcaoDestino = -1;
+                    if (lstPassageiroNew.Exists(x => x.Wait == false))
+                    {
+                        Passageiro pass = lstPassageiroNew.Find(item => item.Wait == false);
+                        if (pass.PosDestino > posAtual)
+                            direcaoDestino = (int)EDirecaoDestino.subir;
+                        else if (pass.PosDestino < posAtual)
+                            direcaoDestino = (int)EDirecaoDestino.descer;
+                    }
+                    else
+                    {
+                        Passageiro pass = lstPassageiroNew.Find(item => item.Wait == true);
+                        if (pass.PosDestino > posAtual)
+                            direcaoDestino = (int)EDirecaoDestino.subir;
+                        else if (pass.PosDestino < posAtual)
+                            direcaoDestino = (int)EDirecaoDestino.descer;
+                        else
+                            direcaoDestino = -1;
+                    }             
 
                     Run(lstPassageiroNew, posAtual);
                 }

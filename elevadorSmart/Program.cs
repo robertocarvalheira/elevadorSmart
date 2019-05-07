@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace elevadorSmart
+namespace ElevadorSmartDotNetFramework
 {
     class Program
     {
@@ -30,12 +30,13 @@ namespace elevadorSmart
             posAtualElevador = 3;
 
             lstPassageiros.Clear();
+
+            lstPassageiros.Add(new Passageiro("Passageiro 03", 3, 15));
             lstPassageiros.Add(new Passageiro("Passageiro 01", 8, 0));
             lstPassageiros.Add(new Passageiro("Passageiro 02", 0, 7));
-            lstPassageiros.Add(new Passageiro("Passageiro 03", 3, 15));
 
             Console.WriteLine("");
-            Elevador.Run(lstPassageiros, posAtualElevador);
+            ElevadorDoisBotoes.Run(lstPassageiros, posAtualElevador);
 
             lstPassageiros.Clear();
             Console.WriteLine("");
@@ -64,7 +65,11 @@ namespace elevadorSmart
 
             Console.WriteLine("");
 
-            Elevador.Run(lstPassageiros, posAtualElevador);
+            ElevadorDoisBotoes.Run(lstPassageiros, posAtualElevador);
+
+            Console.WriteLine("");
+            Console.WriteLine("Cenário 02, considerando que ambos os passageiros solicitaram elevador ao mesmo tempo:".ToUpper());
+
         }
     }
 
